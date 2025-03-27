@@ -1,0 +1,9 @@
+# We don't want to push the datasets to our gitrepo, instead we push just the instructions
+# for downloading them.
+
+# Ignore everything
+*
+
+# But not these files
+!.gitignore
+!README.md

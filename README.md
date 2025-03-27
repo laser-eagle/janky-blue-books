@@ -25,8 +25,15 @@
 - SQLite is used to keep things simple.
 - Allows operation without internet access.
 - Reduces system footprint.
+- https://www.sqlite.org/index.html
 
 ## Data Collection Practices
+
+### Open Datasets
+
+#### Kaggle
+
+- https://www.kaggle.com/datasets/sidharth178/car-prices-dataset?resource=download
 
 ## Architecture
 
@@ -43,4 +50,4 @@
 
 ## License
 
-- No license or warranenty is provided.
+- No license or warranty is provided.
