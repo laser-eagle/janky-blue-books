@@ -1,0 +1,20 @@
+export type Car = {
+  ID: number;
+  Price: number;
+  Levy: string;
+  Manufacturer: string;
+  Model: string;
+  ProdYear: number;
+  Category: string;
+  LeatherInterior: string;
+  FuelType: string;
+  EngineVolume: string;
+  Mileage: string;
+  Cylinders: number;
+  GearBoxType: string;
+  DriveWheels: string;
+  Doors: string;
+  Wheel: string;
+  Color: string;
+  Airbags: number;
+};
