@@ -1,11 +1,18 @@
-import { VirtualCarTable } from "../components/VirtualCarTable";
+import { VirtualCarTableContainer } from "../components/VirtualCarTable";
 
 import { useFindAll } from "../__generated__/api/car-prices";
+import { Header } from "../components/Header";
+
 export const AllCars = () => {
   const { data } = useFindAll();
   if (!data) {
     return "Loading";
   }
 
-  return <VirtualCarTable data={data.data as any} />;
+  return (
+    <div style={{ overflow: "hidden" }}>
+      <Header />
+      <VirtualCarTableContainer data={data.data as any} />;
+    </div>
+  );
 };

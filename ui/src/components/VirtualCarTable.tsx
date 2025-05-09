@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -6,6 +6,8 @@ import {
   createColumnHelper,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
+
+import { CarFilters, VirtualCarSearchBar } from "./VirtualCarSearchBar";
 
 export type Car = {
   ID: number;
@@ -49,25 +51,40 @@ export type CarColumnKey =
   | "Airbags";
 
 export const carColumns: { key: CarColumnKey; width: number }[] = [
-  { key: "ID", width: 70 },
+  // { key: "ID", width: 70 },
   { key: "Price", width: 80 },
   { key: "Levy", width: 60 },
   { key: "Manufacturer", width: 130 },
   { key: "Model", width: 120 },
   { key: "ProdYear", width: 90 },
   { key: "Category", width: 100 },
-  { key: "LeatherInterior", width: 110 },
-  { key: "FuelType", width: 80 },
+  // { key: "LeatherInterior", width: 110 },
+  // { key: "FuelType", width: 80 },
   { key: "EngineVolume", width: 100 },
   { key: "Mileage", width: 90 },
   { key: "Cylinders", width: 80 },
   { key: "GearBoxType", width: 110 },
   { key: "DriveWheels", width: 90 },
-  { key: "Doors", width: 80 },
-  { key: "Wheel", width: 80 },
+  // { key: "Doors", width: 80 },
+  // { key: "Wheel", width: 80 },
   { key: "Color", width: 90 },
-  { key: "Airbags", width: 80 },
+  // { key: "Airbags", width: 80 },
 ];
+
+function filterCars(cars: Car[], filter: CarFilters): Car[] {
+  return cars.filter((car) => {
+    if (
+      filter.manufacturer &&
+      filter.manufacturer.toLowerCase() != car.Manufacturer.toLowerCase()
+    )
+      return false;
+    if (filter.model && filter.model.toLowerCase() != car.Model.toLowerCase())
+      return false;
+    if (filter.minYear && filter.minYear > car.ProdYear) return false;
+    if (filter.maxYear && filter.maxYear < car.ProdYear) return false;
+    return true;
+  });
+}
 
 const columnHelper = createColumnHelper<Car>();
 
@@ -78,6 +95,39 @@ const columns = carColumns.map((col) =>
   })
 );
 
+export function VirtualCarTableContainer({ data }: { data: Car[] }) {
+  const [carFilter, setCarFilter] = useState<CarFilters>({
+    manufacturer: "",
+    model: "",
+    maxYear: "",
+    minYear: "",
+  });
+
+  let filteredData = filterCars(data, carFilter);
+
+  return (
+    <div>
+      <div>
+        <VirtualCarSearchBar onChange={(filter) => setCarFilter(filter)} />
+      </div>
+      <div
+        style={{
+          position: "relative",
+          paddingLeft: "1rem",
+          paddingRight: "1rem",
+        }}
+      >
+        {filteredData.length ? (
+          <VirtualCarTable data={filteredData} />
+        ) : (
+          <div style={{ width: "100%", textAlign: "center" }}>
+            No matches that meet this criteria.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 export function VirtualCarTable({ data }: { data: Car[] }) {
   const table = useReactTable({
     data,
@@ -94,7 +144,7 @@ export function VirtualCarTable({ data }: { data: Car[] }) {
   });
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ height: "89vh", display: "flex", flexDirection: "column" }}>
       <div style={{ display: "flex", borderBottom: "1px solid #ccc" }}>
         {table.getHeaderGroups()[0].headers.map((header) => (
           <div
